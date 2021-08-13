@@ -5,7 +5,7 @@ import { formatJSONResponse } from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 import { ProductService } from '../../services/product-service';
 
-const getProductsList = async () => {
+export const getProductsList = async () => {
   let products;
 
   try {

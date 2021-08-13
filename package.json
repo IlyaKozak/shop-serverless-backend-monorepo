@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@middy/http-cors": "^2.5.1"
+  }
+}

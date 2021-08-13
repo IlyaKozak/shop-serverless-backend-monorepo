@@ -5,7 +5,7 @@ import { formatJSONResponse } from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 import { ProductService } from '../../services/product-service';
 
-const getProductById = async (event) => {
+export const getProductById = async (event) => {
   const { id } = event.pathParameters;
   
   let product;
