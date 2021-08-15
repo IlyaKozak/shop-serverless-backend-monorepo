@@ -4,7 +4,7 @@ import createError from 'http-errors';
 import { getProductById } from '../src/functions/getProductById/handler';
 
 describe('getProductById function', () => {
-  test('should return one product by id', async () => {
+  it('should return one product by id', async () => {
     const event = {
       pathParameters: {
         id: '002bac9b-d526-48ef-99e3-abc8358b39e3'
@@ -24,7 +24,7 @@ describe('getProductById function', () => {
     });
   });
 
-  test('should return object with statuscode and body properties', async () => {
+  it('should return object with statuscode and body properties', async () => {
     const event = {
       pathParameters: {
         id: '002bac9b-d526-48ef-99e3-abc8358b39e3'
@@ -37,7 +37,7 @@ describe('getProductById function', () => {
     expect(result).toHaveProperty('body');
   }); 
 
-  test('should throw bad-request error for no uuid provided', async () => {
+  it('should throw bad-request error for no uuid provided', async () => {
     const event = {
       pathParameters: { }
     };
@@ -49,7 +49,7 @@ describe('getProductById function', () => {
     })));
   });
 
-  test('should throw bad-request error for incorrect uuid provided', async () => {
+  it('should throw bad-request error for incorrect uuid provided', async () => {
     const event = {
       pathParameters: {
         id: 'not-valid-uuid'
@@ -63,7 +63,7 @@ describe('getProductById function', () => {
     })));
   });
 
-  test('should throw not-found error if product doesn\'t exist', async () => {
+  it('should throw not-found error if product doesn\'t exist', async () => {
     const event = {
       pathParameters: {
         id: 'ab39d30c-6c28-4679-9ce9-bff3064c082a'
