@@ -8,6 +8,7 @@ import { ProductService } from '../../services/product-service';
 
 export const getProductById = async (event) => {
   const { id } = event.pathParameters;
+  
   if (!uuidValidate(id)) {
     throw new createError.BadRequest(JSON.stringify({
       statusCode: StatusCodes.BAD_REQUEST,
