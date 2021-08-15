@@ -1,5 +1,6 @@
 import createError from 'http-errors';
 import { StatusCodes } from 'http-status-codes';
+import { validate as uuidValidate } from 'uuid';
 
 import { formatJSONResponse } from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
@@ -7,6 +8,12 @@ import { ProductService } from '../../services/product-service';
 
 export const getProductById = async (event) => {
   const { id } = event.pathParameters;
+  if (!uuidValidate(id)) {
+    throw new createError.BadRequest(JSON.stringify({
+      statusCode: StatusCodes.BAD_REQUEST,
+      message: `ID "${id}" is not valid uuid!`,
+    }));    
+  }
   
   let product;
 
