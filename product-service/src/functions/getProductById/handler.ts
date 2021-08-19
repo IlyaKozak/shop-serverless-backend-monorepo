@@ -1,3 +1,4 @@
+import { APIGatewayEvent } from 'aws-lambda';
 import createError from 'http-errors';
 import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
@@ -6,7 +7,7 @@ import { formatJSONResponse } from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 import { ProductService } from '../../services/product-service';
 
-export const getProductById = async (event) => {
+export const getProductById = async (event: APIGatewayEvent) => {
   const { id } = event.pathParameters;
   
   if (!uuidValidate(id)) {
