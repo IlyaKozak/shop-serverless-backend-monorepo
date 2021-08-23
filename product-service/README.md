@@ -47,9 +47,6 @@ The project code base is mainly located within the `src` folder. This folder is 
 │   │   ├── getProductById
 │   │   │   ├── handler.ts      # `getProductById` lambda source code
 │   │   │   └── index.ts        # `getProductById` lambda Serverless configuration
-│   │   ├── swagger
-│   │   │   ├── handler.ts      # `swagger` lambda source code
-│   │   │   └── index.ts        # `swagger` lambda Serverless configuration
 │   │   │
 │   │   └── index.ts            # Import/export of all lambda configurations
 │   │
