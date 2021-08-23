@@ -38,19 +38,42 @@ The project code base is mainly located within the `src` folder. This folder is 
 ```
 .
 ├── src
+│   ├── assets                  # Assets
+│   │   └── products.json       # Mock products data
 │   ├── functions               # Lambda configuration and source code folder
 │   │   ├── getProductsList
 │   │   │   ├── handler.ts      # `getProductsList` lambda source code
-│   │   │   ├── index.ts        # `getProductsList` lambda Serverless configuration
+│   │   │   └── index.ts        # `getProductsList` lambda Serverless configuration
+│   │   ├── getProductById
+│   │   │   ├── handler.ts      # `getProductById` lambda source code
+│   │   │   └── index.ts        # `getProductById` lambda Serverless configuration
+│   │   ├── swagger
+│   │   │   ├── handler.ts      # `swagger` lambda source code
+│   │   │   └── index.ts        # `swagger` lambda Serverless configuration
 │   │   │
 │   │   └── index.ts            # Import/export of all lambda configurations
 │   │
-│   └── libs                    # Lambda shared code
-│       └── apiGateway.ts       # API Gateway specific helpers
-│       └── handlerResolver.ts  # Sharable library for resolving lambda handlers
-│       └── lambda.ts           # Lambda middleware
+│   ├── libs                    # Lambda shared code
+│   │   └── apiGateway.ts       # API Gateway specific helpers
+│   │   └── handlerResolver.ts  # Sharable library for resolving lambda handlers
+│   │   └── lambda.ts           # Lambda middleware
+│   │
+│   ├── services                # Shared services
+│   │   └── product-service.ts  # Shared ProductService
+│   │
+│   ├── swagger                 # Swagger documentation
+│   │   └── product-service-swagger.yaml  # Swagger documentation for ProductService (yaml)
+│   │   └── product-service-swagger.json  # Swagger documentation for ProductService (json)
+│   │
+│   └── types                   # Shared types
+│       └── product.ts          # Product type
+│
+├── tests                       # Tests
+│   └── getProductsList.test.ts # Unit tests for `getProductsList` lambda
+│   └── getProductById.test.ts  # Unit tests for `getProductById` lambda
 │
 ├── package.json
+├── jest.config.ts              # Jest tests config file
 ├── serverless.ts               # Serverless service file
 ├── tsconfig.json               # Typescript compiler configuration
 ├── tsconfig.paths.json         # Typescript paths
@@ -59,7 +82,8 @@ The project code base is mainly located within the `src` folder. This folder is 
 
 ### 3rd party libraries
 
-- [middy](https://github.com/middyjs/middy) - middleware engine for Node.Js lambda. This template uses [http-json-body-parser](https://github.com/middyjs/middy/tree/master/packages/http-json-body-parser) to convert API Gateway `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object
+- [middy](https://github.com/middyjs/middy) - middleware engine for Node.Js lambda. This template uses [http-json-body-parser](https://github.com/middyjs/middy/tree/master/packages/http-json-body-parser) to convert API Gateway `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object, [http-cors](https://github.com/middyjs/middy/tree/main/packages/http-cors) to set HTTP CORS headers, necessary for making cross-origin requests, to the response object, [http-error-handler](https://github.com/middyjs/middy/tree/main/packages/http-error-handler) to automatically handle uncaught errors that contain the properties statusCode (number) and message (string) and create a proper HTTP response for them, [http-event-normalizer](https://github.com/middyjs/middy/tree/main/packages/http-event-normalizer) to access the query string or path parameters in an API Gateway event.
+
 - [@serverless/typescript](https://github.com/serverless/typescript) - provides up-to-date TypeScript definitions for your `serverless.ts` service file
 
 ### Advanced usage
