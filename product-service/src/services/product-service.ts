@@ -1,12 +1,28 @@
-import products from '../assets/products.json';
+import { Client, QueryConfig } from 'pg';
+
 import { Product } from '../types/product';
 
+const client = new Client();
+client.connect();
+const productsTableName = 'products';
+
 export class ProductService {
-  static getProductsList(): Promise<Product[]> {
-    return Promise.resolve(products);
+  static async getProductsList(): Promise<Product[] | null> {
+    const query: QueryConfig = {
+      text: `SELECT * FROM ${productsTableName}`,
+    };
+
+    const result = await client.query(query);
+    return result.rows ? result.rows : null;
   }
 
-  static getProductById(id: string): Promise<Product> {
-    return Promise.resolve(products.find((product: Product) => product.id === id));
+  static async getProductById(id: string): Promise<Product | null> {
+    const query: QueryConfig = {
+      text: `SELECT * FROM ${productsTableName} WHERE id = $1`,
+      values: [id],
+    };
+
+    const result = await client.query(query);
+    return result.rows[0] ? result.rows[0] : null;
   }
 }
