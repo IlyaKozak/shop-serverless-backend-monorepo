@@ -5,6 +5,7 @@ const { PGHOST, PGUSER, PGDATABASE, PGPASSWORD, PGPORT } = process.env;
 
 import { getProductsList } from './src/functions/index';
 import { getProductById } from './src/functions/index';
+import { createProduct } from './src/functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -41,7 +42,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { getProductsList, getProductById },
+  functions: { getProductsList, getProductById, createProduct },
   variablesResolutionMode: '20210326',
 };
 

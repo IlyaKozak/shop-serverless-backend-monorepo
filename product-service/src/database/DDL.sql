@@ -10,9 +10,6 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS stocks (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  product_id UUID UNIQUE,
-  count INTEGER,
-  CONSTRAINT fk_product 
-  FOREIGN KEY(product_id) 
-  REFERENCES products(id) ON DELETE CASCADE
+  product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+  count INTEGER
 );
