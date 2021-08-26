@@ -2,7 +2,7 @@ import 'source-map-support/register';
 
 import { APIGatewayEvent } from 'aws-lambda';
 import createError from 'http-errors';
-import { StatusCodes } from 'http-status-codes';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 import schema from './schema';
 import type { ValidatedEventAPIGatewayProxyEvent } from '../../libs/apiGateway';
@@ -16,10 +16,11 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = 
   try {
     product = await ProductService.createProduct(event.body);
   } catch (error) {
-    throw new createError.InternalServerError(JSON.stringify({
-      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      message: error,
-    }));
+    throw createError(
+      StatusCodes.INTERNAL_SERVER_ERROR, 
+      ReasonPhrases.INTERNAL_SERVER_ERROR, 
+      { expose: true }
+    );
   }
 
   return formatJSONResponse(product);

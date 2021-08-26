@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import { StatusCodes } from 'http-status-codes';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 import { formatJSONResponse } from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
@@ -11,10 +11,11 @@ export const getProductsList = async () => {
   try {
     products = await ProductService.getProductsList();
   } catch (error) {
-    throw new createError.InternalServerError(JSON.stringify({
-      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      message: error,
-    }));
+    throw createError(
+      StatusCodes.INTERNAL_SERVER_ERROR, 
+      ReasonPhrases.INTERNAL_SERVER_ERROR, 
+      { expose: true }
+    );
   }
 
   return formatJSONResponse(products);
