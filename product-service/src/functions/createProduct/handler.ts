@@ -11,6 +11,8 @@ import { middyfy } from '../../libs/lambda';
 import { ProductService } from '../../services/product-service';
 
 export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event: APIGatewayEvent) => {
+  console.log('POST PRODUCTS/ EVENT OBJECT: ', event);
+
   let product;
 
   try {

@@ -8,6 +8,8 @@ import { middyfy } from '../../libs/lambda';
 import { ProductService } from '../../services/product-service';
 
 export const getProductById = async (event: APIGatewayEvent) => {
+  console.log('GET PRODUCTS/{ID} EVENT OBJECT: ', event);
+
   const { id } = event.pathParameters;
   
   if (!uuidValidate(id)) {

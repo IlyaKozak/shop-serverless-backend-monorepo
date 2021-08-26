@@ -10,6 +10,8 @@ export const middyfy = (handler: Handler) => {
     httpJsonBodyParser(),
     httpEventNormalizer(),
     httpErrorHandler(),
-    cors(),
+    cors({
+      credentials: true,
+    }),
   ]);
 };
