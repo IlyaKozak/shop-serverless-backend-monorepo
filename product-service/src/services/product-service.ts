@@ -2,8 +2,9 @@ import { Client, QueryConfig } from 'pg';
 
 import { Product } from '../types/product';
 import { productsTable, stocksTable } from '../common/constants';
+import { ProductServiceMock } from '../tests/mock/product-service-mock';
 
-export class ProductService {
+class ProductService {
   static client: Client | null = null;
 
   static async createConnection() {
@@ -89,3 +90,11 @@ export class ProductService {
     return ProductService.getProductById(productId);
   }
 }
+
+// Jest Testing Settings
+const { NODE_ENV } = process.env;
+const ProductServiceAPI = NODE_ENV === 'test' ? ProductServiceMock : ProductService;
+
+export {
+  ProductServiceAPI as ProductService
+};
