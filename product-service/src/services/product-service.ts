@@ -2,7 +2,7 @@ import { Client, QueryConfig } from 'pg';
 
 import { Product } from '../types/product';
 import { productsTable, stocksTable } from '../common/constants';
-import { ProductServiceMock } from '../tests/mock/product-service-mock';
+import { ProductServiceMock } from '../tests/mocks/product-service-mock';
 
 class ProductService {
   static client: Client | null = null;

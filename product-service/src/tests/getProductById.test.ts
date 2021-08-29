@@ -1,11 +1,12 @@
 import createError from 'http-errors';
+import { StatusCodes } from 'http-status-codes';
 
 import { getProductById } from '../functions/getProductById/handler';
 import { APIGatewayEvent } from 'aws-lambda';
-import { APIGatewayEventMock } from './mock/apiGatewayMock'; 
+import { APIGatewayEventMock } from './mocks/apiGatewayMock'; 
 
 describe('getProductById function', () => {
-  it('should return one product by id', async () => {
+  it('returns one product by id', async () => {
     const event: APIGatewayEvent = {
       ...APIGatewayEventMock,
       pathParameters: {
@@ -14,6 +15,8 @@ describe('getProductById function', () => {
     };
 
     const result = await getProductById(event);
+    expect(result.statusCode).toEqual(StatusCodes.OK);
+
     const product = JSON.parse(result.body);
 
     expect(product).toEqual({
@@ -26,7 +29,7 @@ describe('getProductById function', () => {
     });
   });
 
-  it('should return object with statuscode and body properties', async () => {
+  it('returns object with statuscode and body properties', async () => {
     const event: APIGatewayEvent = {
       ...APIGatewayEventMock,
       pathParameters: {
@@ -40,19 +43,19 @@ describe('getProductById function', () => {
     expect(result).toHaveProperty('body');
   }); 
 
-  it('should throw bad-request error for no uuid provided', async () => {
+  it('throws bad-request error for no uuid provided', async () => {
     const event: APIGatewayEvent = {
       ...APIGatewayEventMock,
       pathParameters: { }
     };
-
+ 
     await expect(getProductById(event))
       .rejects.toThrowError(new createError.BadRequest(
         `ID "undefined" is not valid uuid!`
       ));
   });
 
-  it('should throw bad-request error for incorrect uuid provided', async () => {
+  it('throws bad-request error for incorrect uuid provided', async () => {
     const event: APIGatewayEvent = {
       ...APIGatewayEventMock,
       pathParameters: {
@@ -66,7 +69,7 @@ describe('getProductById function', () => {
       ));
   });
 
-  it('should throw not-found error if product doesn\'t exist', async () => {
+  it('throws not-found error if product doesn\'t exist', async () => {
     const event: APIGatewayEvent = {
       ...APIGatewayEventMock,
       pathParameters: {
