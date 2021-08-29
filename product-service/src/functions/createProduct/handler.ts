@@ -18,6 +18,8 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = 
   try {
     product = await ProductService.createProduct(event.body);
   } catch (error) {
+    console.error('[ERROR] POST PRODUCTS/ ERROR: ', event);
+
     throw createError(
       StatusCodes.INTERNAL_SERVER_ERROR, 
       ReasonPhrases.INTERNAL_SERVER_ERROR, 

@@ -1,10 +1,10 @@
 swagger: "2.0"
 info:
   description: "Product Service Swagger Documentation"
-  version: "1.0.0"
+  version: 2.0.0
   title: "Product Service Swagger Documentation"
-host: "7khi9mwaza.execute-api.eu-west-1.amazonaws.com"
-basePath: "/dev"
+host: "zz73b76oel.execute-api.eu-west-1.amazonaws.com"
+basePath: "/rds"
 schemes:
 - "https"
 paths:
@@ -24,6 +24,31 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Product"
+        "500":
+          description: "Internal Server Error"
+    post:
+      tags:
+      - "Product Service"
+      summary: "Create a New Product"
+      description: "Returns Created Product"
+      operationId: "createProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "newProductToCreate"
+        in: "body"
+        description: "New product that needs to be added"
+        schema:
+          $ref: "#/definitions/Product"
+      responses:
+        "200":
+          description: "Successful Operation"
+          schema:
+            $ref: "#/definitions/Product"
+        "400":
+          description: "Invalid Request Body (Bad Request)"
         "500":
           description: "Internal Server Error"
           
@@ -59,21 +84,28 @@ definitions:
   Product:
     type: "object"
     required:
-    - "name"
-    - "photoUrls"
+    - "title"
     properties:
       id:
         type: "string"
         format: "uuid"
+        readOnly: true
       title:
-        type: "string"        
+        type: "string"
+        example: "New Product Title"
       description:
         type: "string"
+        example: "New Product Description"
       price:
         type: "number"
         format: "float"
+        example: 55.55
+        minimum: 0
       count:
         type: "integer"
+        example: 5
+        minimum: 0
       src:
         type: "string"
         format: "uri"
+        example: "https://images.unsplash.com/photo-1586391159312-e26d25fa4c42?width=500"

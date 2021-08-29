@@ -8,7 +8,7 @@ import { middyfy } from '../../libs/lambda';
 import { ProductService } from '../../services/product-service';
 
 export const getProductById = async (event: APIGatewayEvent) => {
-  console.log('GET PRODUCTS/{ID} EVENT OBJECT: ', event);
+  console.log('[INFO] GET PRODUCTS/{ID} EVENT OBJECT: ', event);
 
   const { id } = event.pathParameters;
   
@@ -21,6 +21,8 @@ export const getProductById = async (event: APIGatewayEvent) => {
   try {
     product = await ProductService.getProductById(id);
   } catch (error) {
+    console.error('[ERROR] GET PRODUCTS/{ID} ERROR: ', event);
+
     throw createError(
       StatusCodes.INTERNAL_SERVER_ERROR, 
       ReasonPhrases.INTERNAL_SERVER_ERROR,

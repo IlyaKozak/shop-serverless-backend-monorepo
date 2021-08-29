@@ -13,6 +13,7 @@ export class ProductService {
 
   static async closeConnection() {
     await ProductService.client.end();
+    ProductService.client = null;
   }
 
   static async getProductsList(): Promise<Product[] | null> {
@@ -29,6 +30,7 @@ export class ProductService {
     };
 
     const { rows } = await ProductService.client.query(sql);
+
     return rows ? rows : null;
   }
 
@@ -48,6 +50,7 @@ export class ProductService {
     };
 
     const { rows } = await ProductService.client.query(sql);
+
     return rows[0] ? rows[0] : null;
   }
 
@@ -79,6 +82,7 @@ export class ProductService {
 
     } catch (error) {
       await ProductService.client.query('ROLLBACK;');
+
       throw error;
     }
 

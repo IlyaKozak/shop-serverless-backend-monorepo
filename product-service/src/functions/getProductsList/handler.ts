@@ -14,6 +14,8 @@ export const getProductsList = async (event: APIGatewayEvent) => {
   try {
     products = await ProductService.getProductsList();
   } catch (error) {
+    console.error('[ERROR] GET PRODUCTS/ ERROR: ', event);
+
     throw createError(
       StatusCodes.INTERNAL_SERVER_ERROR, 
       ReasonPhrases.INTERNAL_SERVER_ERROR, 
