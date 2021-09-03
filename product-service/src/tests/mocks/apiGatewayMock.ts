@@ -1,4 +1,4 @@
-import { APIGatewayEvent } from "aws-lambda";
+import { APIGatewayEvent, Context } from "aws-lambda";
 
 export const APIGatewayEventMock: APIGatewayEvent = {
   "body": "eyJ0ZXN0IjoiYm9keSJ9",
@@ -127,4 +127,21 @@ export const APIGatewayEventMock: APIGatewayEvent = {
     "apiId": "1234567890",
     "protocol": "HTTP/1.1"
   }
+};
+
+export const contextMock: Context = {
+  callbackWaitsForEmptyEventLoop: true,
+  succeed: () => {},
+  fail: () => {},
+  done: () => {},
+  functionVersion: '$LATEST',
+  functionName: 'createProduct',
+  memoryLimitInMB: '128',
+  logGroupName: '/aws/lambda/createProduct',
+  logStreamName: '2021/09/03/[$LATEST]21893310af7a401887c9cfb25c65a26d',
+  clientContext: undefined,
+  identity: undefined,
+  invokedFunctionArn: 'arn:aws:lambda:eu-west-1:833110899405:function:createProduct',
+  awsRequestId: 'a987b546-93c3-4845-acb6-c0c5c61535c1',
+  getRemainingTimeInMillis: () => 5,
 };

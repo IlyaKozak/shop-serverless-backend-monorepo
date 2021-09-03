@@ -21,7 +21,7 @@ export const getProductById = async (event: APIGatewayEvent) => {
   try {
     product = await ProductService.getProductById(id);
   } catch (error) {
-    console.error('[ERROR] GET PRODUCTS/{ID} ERROR: ', event);
+    console.error('[ERROR] GET PRODUCTS/{ID} ERROR: ', error);
 
     throw createError(
       StatusCodes.INTERNAL_SERVER_ERROR, 

@@ -55,7 +55,7 @@ class ProductService {
     return rows[0] ? rows[0] : null;
   }
 
-  static async createProduct(product: any): Promise<Product | null> {
+  static async createProduct(product: Product): Promise<Product | null> {
     if (!ProductService.client) {
       await ProductService.createConnection();
     }
