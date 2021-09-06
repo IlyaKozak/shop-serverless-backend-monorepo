@@ -1,0 +1,91 @@
+# Serverless - AWS Node.js Typescript
+
+This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/).
+
+For detailed instructions, please refer to the [documentation](https://www.serverless.com/framework/docs/providers/aws/).
+
+## Installation/deployment instructions
+
+Depending on your preferred package manager, follow the instructions below to deploy your project.
+
+> **Requirements**: NodeJS `lts/fermium (v.14.15.0)`. If you're using [nvm](https://github.com/nvm-sh/nvm), run `nvm use` to ensure you're using the same Node version in local and in your lambda's runtime.
+
+### Using NPM
+
+- Run `npm i` to install the project dependencies
+- Run `npx sls deploy` to deploy this stack to AWS
+
+### Using Yarn
+
+- Run `yarn` to install the project dependencies
+- Run `yarn sls deploy` to deploy this stack to AWS
+
+## Testing
+
+- Run `npx jest` to test lambda functions
+
+## Template features
+
+### Project structure
+
+The project code base is mainly located within the `src` folder. This folder is divided in:
+
+- `functions` - containing code base and configuration for lambda functions
+- `libs` - containing shared code base between lambdas
+- `services` - containing shared services between lambdas
+- `swagger` - contains swagger documentation for lambdas
+
+```
+.
+├── src
+│   ├── assets                  # Assets
+│   │   └── products.json       # Mock products data
+│   ├── functions               # Lambda configuration and source code folder
+│   │   ├── getProductsList
+│   │   │   ├── handler.ts      # `getProductsList` lambda source code
+│   │   │   └── index.ts        # `getProductsList` lambda Serverless configuration
+│   │   ├── getProductById
+│   │   │   ├── handler.ts      # `getProductById` lambda source code
+│   │   │   └── index.ts        # `getProductById` lambda Serverless configuration
+│   │   ├── swagger
+│   │   │   ├── handler.ts      # `swagger` lambda source code
+│   │   │   └── index.ts        # `swagger` lambda Serverless configuration
+│   │   │
+│   │   └── index.ts            # Import/export of all lambda configurations
+│   │
+│   ├── libs                    # Lambda shared code
+│   │   └── apiGateway.ts       # API Gateway specific helpers
+│   │   └── handlerResolver.ts  # Sharable library for resolving lambda handlers
+│   │   └── lambda.ts           # Lambda middleware
+│   │
+│   ├── services                # Shared services
+│   │   └── product-service.ts  # Shared ProductService
+│   │
+│   ├── swagger                 # Swagger documentation
+│   │   └── product-service-swagger.yaml  # Swagger documentation for ProductService (yaml)
+│   │   └── product-service-swagger.json  # Swagger documentation for ProductService (json)
+│   │
+│   └── types                   # Shared types
+│       └── product.ts          # Product type
+│
+├── tests                       # Tests
+│   └── getProductsList.test.ts # Unit tests for `getProductsList` lambda
+│   └── getProductById.test.ts  # Unit tests for `getProductById` lambda
+│
+├── package.json
+├── jest.config.ts              # Jest tests config file
+├── serverless.ts               # Serverless service file
+├── tsconfig.json               # Typescript compiler configuration
+├── tsconfig.paths.json         # Typescript paths
+└── webpack.config.js           # Webpack configuration
+```
+
+### 3rd party libraries
+
+- [middy](https://github.com/middyjs/middy) - middleware engine for Node.Js lambda. This template uses [http-json-body-parser](https://github.com/middyjs/middy/tree/master/packages/http-json-body-parser) to convert API Gateway `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object, [http-cors](https://github.com/middyjs/middy/tree/main/packages/http-cors) to set HTTP CORS headers, necessary for making cross-origin requests, to the response object, [http-error-handler](https://github.com/middyjs/middy/tree/main/packages/http-error-handler) to automatically handle uncaught errors that contain the properties statusCode (number) and message (string) and create a proper HTTP response for them, [http-event-normalizer](https://github.com/middyjs/middy/tree/main/packages/http-event-normalizer) to access the query string or path parameters in an API Gateway event.
+
+- [@serverless/typescript](https://github.com/serverless/typescript) - provides up-to-date TypeScript definitions for your `serverless.ts` service file
+
+### Advanced usage
+
+Any tsconfig.json can be used, but if you do, set the environment variable `TS_NODE_CONFIG` for building the application, eg `TS_NODE_CONFIG=./tsconfig.app.json npx serverless webpack`
