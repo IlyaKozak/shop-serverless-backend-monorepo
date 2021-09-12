@@ -6,7 +6,7 @@ import createError from 'http-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 import { middyfy } from '../../libs/lambda';
-import { AWS_REGION, S3_BUCKET_FOLDER } from '../../common/constants';
+import { AWS_REGION, S3_BUCKET_FOLDER_UPLOAD } from '../../common/constants';
 import { formatJSONResponse } from '../../libs/apiGateway';
 
 const importProductsFile = async (event: APIGatewayEvent) => {
@@ -17,7 +17,7 @@ const importProductsFile = async (event: APIGatewayEvent) => {
 
     const name = event.queryStringParameters.name;
 
-    const s3Path = `${S3_BUCKET_FOLDER}/${name}`;
+    const s3Path = `${S3_BUCKET_FOLDER_UPLOAD}/${name}`;
 
     const s3Params = {
       Bucket: process.env.S3_BUCKET,

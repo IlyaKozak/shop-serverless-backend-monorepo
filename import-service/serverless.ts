@@ -1,7 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 import { AWS_REGION } from './src/common/constants';
-import importProductsFile from './src/functions/importProductsFile';
+import { importProductsFile, importFileParser } from './src/functions/';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -39,7 +39,7 @@ const serverlessConfiguration: AWS = {
     ],
   },
   // import the function via paths
-  functions: { importProductsFile },
+  functions: { importProductsFile, importFileParser },
 };
 
 module.exports = serverlessConfiguration;
