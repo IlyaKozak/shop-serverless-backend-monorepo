@@ -9,24 +9,24 @@ import { middyfy } from '../../libs/lambda';
 import { AWS_REGION, BUCKER_FOLDER } from '../../common/constants';
 import { formatJSONResponse } from '../../libs/apiGateway';
 
-const s3 = new AWS.S3({ region: AWS_REGION });
-
 const importProductsFile = async (event: APIGatewayEvent) => {
-  console.log('GET IMPORT/ EVENT OBJECT: ', event);
+  // console.log('GET IMPORT/ EVENT OBJECT: ', event);
 
   try {
+    const s3 = new AWS.S3({ region: AWS_REGION });
+
     const name = event.queryStringParameters.name;
 
-    const path = `${BUCKER_FOLDER}/${name}`;
+    const s3Path = `${BUCKER_FOLDER}/${name}`;
 
-    const params = {
+    const s3Params = {
       Bucket: 'import-service-serverless',
-      Key: path,
+      Key: s3Path,
       Expires: 60,
       ContentType: 'text/csv',
     };
 
-    const url = await s3.getSignedUrlPromise('putObject', params);
+    const url = await s3.getSignedUrlPromise('putObject', s3Params);
 
     return formatJSONResponse(url);
   } catch (error) {

@@ -1,5 +1,4 @@
 import { Handler } from 'aws-lambda';
-
 import middy from '@middy/core'
 import middyJsonBodyParser from '@middy/http-json-body-parser';
 import httpEventNormalizer from '@middy/http-event-normalizer';

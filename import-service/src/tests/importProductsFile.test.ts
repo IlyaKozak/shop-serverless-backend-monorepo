@@ -1,12 +1,41 @@
-// import { APIGatewayEvent } from 'aws-lambda';
-// import createError from 'http-errors';
+import AWSMock from 'aws-sdk-mock';
+import AWS from 'aws-sdk';
+import { StatusCodes } from 'http-status-codes';
 
-import { importProductsFile } from '../functions';
+import { main as importProductsFile } from '../functions/importProductsFile/handler';
+import { APIGatewayEventMock, contextMock } from './mocks/apiGatewayMock';
+import { s3SignedUrlMock } from './mocks/s3SignedUrlMock';
 
 describe('importProductsFile function', () => {
-  it('importProductsFile a product', async () => {
-    console.log(importProductsFile);
+  it('returns signed url for S3', async () => {
+    AWSMock.setSDKInstance(AWS);
+    AWSMock.mock(
+      'S3', 
+      'getSignedUrl', 
+      (_action: string, _params: object, callback: (err: Error, url: string) => void) => {
+      callback(null, s3SignedUrlMock);
+    });
 
-    expect(2).toBe(2);
+    const { body } = await importProductsFile(APIGatewayEventMock, contextMock, () => {});
+    
+    AWSMock.restore('S3');
+
+    expect(JSON.parse(body)).toBe(s3SignedUrlMock);
+  });
+
+  it('returns status code 200 (OK)', async () => {
+    AWSMock.setSDKInstance(AWS);
+    AWSMock.mock(
+      'S3', 
+      'getSignedUrl', 
+      (_action: string, _params: object, callback: (err: Error, url: string) => void) => {
+      callback(null, s3SignedUrlMock);
+    });
+
+    const { statusCode } = await importProductsFile(APIGatewayEventMock, contextMock, () => {});
+    
+    AWSMock.restore('S3');
+
+    expect(statusCode).toBe(StatusCodes.OK);
   });
 });
