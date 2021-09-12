@@ -6,21 +6,21 @@ import createError from 'http-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 import { middyfy } from '../../libs/lambda';
-import { AWS_REGION, BUCKER_FOLDER } from '../../common/constants';
+import { AWS_REGION, S3_BUCKET_FOLDER } from '../../common/constants';
 import { formatJSONResponse } from '../../libs/apiGateway';
 
 const importProductsFile = async (event: APIGatewayEvent) => {
-  // console.log('GET IMPORT/ EVENT OBJECT: ', event);
+  console.log('GET IMPORT/ EVENT OBJECT: ', event);
 
   try {
     const s3 = new AWS.S3({ region: AWS_REGION });
 
     const name = event.queryStringParameters.name;
 
-    const s3Path = `${BUCKER_FOLDER}/${name}`;
+    const s3Path = `${S3_BUCKET_FOLDER}/${name}`;
 
     const s3Params = {
-      Bucket: 'import-service-serverless',
+      Bucket: process.env.S3_BUCKET,
       Key: s3Path,
       Expires: 60,
       ContentType: 'text/csv',

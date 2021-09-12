@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
-import importProductsFile from '@functions/importProductsFile';
+import { AWS_REGION } from './src/common/constants';
+import importProductsFile from './src/functions/importProductsFile';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -19,20 +20,21 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
-    region: 'eu-west-1',
+    region: AWS_REGION,
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      S3_BUCKET: '${env:S3_BUCKET}',
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
       {
         Effect: 'Allow',
         Action: 's3:*',
-        Resource: 'arn:aws:s3:::import-service-serverless/*',
+        Resource: 'arn:aws:s3:::${env:S3_BUCKET}/*',
       },
     ],
   },
