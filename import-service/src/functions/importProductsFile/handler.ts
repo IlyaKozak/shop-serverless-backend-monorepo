@@ -1,16 +1,17 @@
 import 'source-map-support/register';
 
 import AWS from 'aws-sdk';
+import { APIGatewayEvent } from 'aws-lambda';
 import createError from 'http-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-import { middyfy } from '@libs/lambda';
-import { AWS_REGION, BUCKER_FOLDER } from 'src/common/constants';
-import { formatJSONResponse } from '@libs/apiGateway';
+import { middyfy } from '../../libs/lambda';
+import { AWS_REGION, BUCKER_FOLDER } from '../../common/constants';
+import { formatJSONResponse } from '../../libs/apiGateway';
 
 const s3 = new AWS.S3({ region: AWS_REGION });
 
-const importProductsFile = async (event) => {
+const importProductsFile = async (event: APIGatewayEvent) => {
   console.log('GET IMPORT/ EVENT OBJECT: ', event);
 
   try {

@@ -7,11 +7,15 @@ const serverlessConfiguration: AWS = {
   frameworkVersion: '2',
   custom: {
     webpack: {
-      webpackConfig: './webpack.config.js',
+      webpackConfig: './webpack.config.ts',
       includeModules: true,
     },
   },
+  package: {
+    individually: true,
+  },
   plugins: ['serverless-webpack'],
+  useDotenv: true,
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
