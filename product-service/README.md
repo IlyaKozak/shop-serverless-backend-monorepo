@@ -30,26 +30,35 @@ Depending on your preferred package manager, follow the instructions below to de
 
 The project code base is mainly located within the `src` folder. This folder is divided in:
 
+- `common` - containing common data (constants)
+- `database` - containing SQL for DB (PostgreSQL)
 - `functions` - containing code base and configuration for lambda functions
 - `libs` - containing shared code base between lambdas
 - `services` - containing shared services between lambdas
 - `swagger` - contains swagger documentation for lambdas
+- `tests` - contains unit tests for lambdas
+- `types` - contains types declarations
 
 ```
 .
 ├── src
-│   ├── assets                  # Assets
-│   │   └── products.json       # Mock products data
+│   ├── common                  # Common data
+│   │   └── constants.ts        # Common constants
+│   │
+│   ├── database                # Database (PostgreSQL)
+│   │   ├── DDL.sql             # DDL SQL
+│   │   └── DML.sql             # DML SQL
+│   │
 │   ├── functions               # Lambda configuration and source code folder
-│   │   ├── getProductsList
-│   │   │   ├── handler.ts      # `getProductsList` lambda source code
-│   │   │   └── index.ts        # `getProductsList` lambda Serverless configuration
+│   │   ├── createProduct
+│   │   │   ├── handler.ts      # `createProduct` lambda source code
+│   │   │   └── index.ts        # `createProduct` lambda Serverless configuration
 │   │   ├── getProductById
 │   │   │   ├── handler.ts      # `getProductById` lambda source code
 │   │   │   └── index.ts        # `getProductById` lambda Serverless configuration
-│   │   ├── swagger
-│   │   │   ├── handler.ts      # `swagger` lambda source code
-│   │   │   └── index.ts        # `swagger` lambda Serverless configuration
+│   │   ├── getProductsList
+│   │   │   ├── handler.ts      # `getProductsList` lambda source code
+│   │   │   └── index.ts        # `getProductsList` lambda Serverless configuration
 │   │   │
 │   │   └── index.ts            # Import/export of all lambda configurations
 │   │
@@ -63,14 +72,14 @@ The project code base is mainly located within the `src` folder. This folder is 
 │   │
 │   ├── swagger                 # Swagger documentation
 │   │   └── product-service-swagger.yaml  # Swagger documentation for ProductService (yaml)
-│   │   └── product-service-swagger.json  # Swagger documentation for ProductService (json)
-│   │
+│   │ 
+│   ├── tests                       # Tests
+│   │   └── createProduct.test.ts   # Unit tests for `createProduct` lambda
+│   │   └── getProductById.test.ts  # Unit tests for `getProductById` lambda
+│   │   └── getProductsList.test.ts # Unit tests for `getProductsList` lambda
+│   │ 
 │   └── types                   # Shared types
 │       └── product.ts          # Product type
-│
-├── tests                       # Tests
-│   └── getProductsList.test.ts # Unit tests for `getProductsList` lambda
-│   └── getProductById.test.ts  # Unit tests for `getProductById` lambda
 │
 ├── package.json
 ├── jest.config.ts              # Jest tests config file

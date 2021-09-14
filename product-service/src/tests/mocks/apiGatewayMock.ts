@@ -1,10 +1,6 @@
-import { StatusCodes } from 'http-status-codes';
-import createError from 'http-errors';
+import { APIGatewayEvent, Context } from "aws-lambda";
 
-import { getProductById } from '../src/functions/getProductById/handler';
-import { APIGatewayEvent } from 'aws-lambda';
-
-const APIGatewayEventMock: APIGatewayEvent = {
+export const APIGatewayEventMock: APIGatewayEvent = {
   "body": "eyJ0ZXN0IjoiYm9keSJ9",
   "resource": "/{proxy+}",
   "path": "/path/to/resource",
@@ -133,82 +129,19 @@ const APIGatewayEventMock: APIGatewayEvent = {
   }
 };
 
-describe('getProductById function', () => {
-  it('should return one product by id', async () => {
-    const event: APIGatewayEvent = {
-      ...APIGatewayEventMock,
-      pathParameters: {
-        id: '002bac9b-d526-48ef-99e3-abc8358b39e3'
-      }
-    };
-
-    const result = await getProductById(event);
-    const product = JSON.parse(result.body);
-
-    expect(product).toEqual({
-      "count": 7,
-      "description": "Mitchell MD200 Double-Cutaway",
-      "id": "002bac9b-d526-48ef-99e3-abc8358b39e3",
-      "price": 199.00,
-      "title": "Mitchell MD200",
-      "src": "https://images.unsplash.com/photo-1508186736123-44a5fcb36f9f?&w=500"
-    });
-  });
-
-  it('should return object with statuscode and body properties', async () => {
-    const event: APIGatewayEvent = {
-      ...APIGatewayEventMock,
-      pathParameters: {
-        id: '002bac9b-d526-48ef-99e3-abc8358b39e3'
-      }
-    };
-
-    const result = await getProductById(event);
-
-    expect(result).toHaveProperty('statusCode');
-    expect(result).toHaveProperty('body');
-  }); 
-
-  it('should throw bad-request error for no uuid provided', async () => {
-    const event: APIGatewayEvent = {
-      ...APIGatewayEventMock,
-      pathParameters: { }
-    };
-
-    await expect(getProductById(event))
-      .rejects.toThrowError(new createError.BadRequest(JSON.stringify({
-      statusCode: StatusCodes.BAD_REQUEST,
-      message: `ID "undefined" is not valid uuid!`,
-    })));
-  });
-
-  it('should throw bad-request error for incorrect uuid provided', async () => {
-    const event: APIGatewayEvent = {
-      ...APIGatewayEventMock,
-      pathParameters: {
-        id: 'not-valid-uuid'
-      }
-    };
-
-    await expect(getProductById(event))
-      .rejects.toThrowError(new createError.BadRequest(JSON.stringify({
-      statusCode: StatusCodes.BAD_REQUEST,
-      message: `ID "${event.pathParameters.id}" is not valid uuid!`,
-    })));
-  });
-
-  it('should throw not-found error if product doesn\'t exist', async () => {
-    const event: APIGatewayEvent = {
-      ...APIGatewayEventMock,
-      pathParameters: {
-        id: 'ab39d30c-6c28-4679-9ce9-bff3064c082a'
-      }
-    };
-
-    await expect(getProductById(event))
-      .rejects.toThrowError(new createError.NotFound(JSON.stringify({
-        statusCode: StatusCodes.NOT_FOUND,
-        message: `Product with ID "${event.pathParameters.id}" not found!`,
-      })));
-  });
-});
+export const contextMock: Context = {
+  callbackWaitsForEmptyEventLoop: true,
+  succeed: () => {},
+  fail: () => {},
+  done: () => {},
+  functionVersion: '$LATEST',
+  functionName: 'createProduct',
+  memoryLimitInMB: '128',
+  logGroupName: '/aws/lambda/createProduct',
+  logStreamName: '2021/09/03/[$LATEST]21893310af7a401887c9cfb25c65a26d',
+  clientContext: undefined,
+  identity: undefined,
+  invokedFunctionArn: 'arn:aws:lambda:eu-west-1:833110899405:function:createProduct',
+  awsRequestId: 'a987b546-93c3-4845-acb6-c0c5c61535c1',
+  getRemainingTimeInMillis: () => 5,
+};
