@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  description: Product & Import Services Swagger Documentation
+  version: 3.0.0-oas3
+  title: Product & Import Services Swagger Documentation
+servers:
+  - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+    description: Product Service
+  - url: https://xc76c6s438.execute-api.eu-west-1.amazonaws.com/dev/
+    description: Import Service
+paths:
+  /products:
+    get:
+      tags:
+        - Product Service
+      summary: List All Products
+      description: Returns Array of All Products
+      operationId: getProductsList
+      servers:
+      - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+        description: Product Service
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - Product Service
+      summary: Create a New Product
+      description: Returns Created Product
+      operationId: createProduct
+      servers:
+      - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+        description: Product Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        description: New product that needs to be added
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid Request Body (Bad Request)
+        '500':
+          description: Internal Server Error
+  /products/{id}:
+    get:
+      tags:
+        - Product Service
+      summary: Find Product by Id
+      description: Returns a Single Product or Not Found Error
+      operationId: getProductById
+      servers:
+      - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+        description: Product Service
+      parameters:
+        - name: id
+          in: path
+          description: Id of Product to Return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid Id Supplied (Bad Request)
+        '404':
+          description: Product Not Found
+        '500':
+          description: Internal Server Error
+  /import:
+    get:
+      tags:
+        - Import Service
+      summary: Generates Presigned URL for File Upload
+      description: Returns a Generated Presigned URL for File Upload
+      operationId: importProductsFile
+      servers:
+        - url: https://xc76c6s438.execute-api.eu-west-1.amazonaws.com/dev/
+          description: Import Service
+      parameters:
+        - in: query
+          name: name
+          description: Filename to Upload
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uri
+                example: "https://import-service-serverless.s3.eu-west-1.amazonaws.com/uploaded/filename?AWSAccessKeyId=ASIA..."
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - title
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          example: New Product Title
+        description:
+          type: string
+          example: New Product Description
+        price:
+          type: number
+          format: float
+          example: 55.55
+          minimum: 0
+        count:
+          type: integer
+          example: 5
+          minimum: 0
+        src:
+          type: string
+          format: uri
+          example: >-
+            https://images.unsplash.com/photo-1586391159312-e26d25fa4c42?width=500
