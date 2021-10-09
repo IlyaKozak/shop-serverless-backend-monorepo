@@ -55,7 +55,7 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: 'sqs:*',
         Resource: {
-          'Fn:GetAtt': ['catalogItemsQueue', 'Arn'],
+          'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
         }
       },
     ],
@@ -77,9 +77,14 @@ const serverlessConfiguration: AWS = {
       },
     },
     Outputs: {
-      catalogItemsQueueURL: {
+      catalogItemsQueueUrl: {
         Value: {
           'Ref': 'catalogItemsQueue',
+        }
+      },
+      catalogItemsQueueArn: {
+        Value: {
+          'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
         }
       }
     }
