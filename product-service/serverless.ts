@@ -1,7 +1,14 @@
 import type { AWS } from '@serverless/typescript';
 import dotenv from 'dotenv';
 dotenv.config();
-const { PGHOST, PGUSER, PGDATABASE, PGPASSWORD, PGPORT } = process.env;
+const { 
+  PGHOST,
+  PGUSER, 
+  PGDATABASE, 
+  PGPASSWORD, 
+  PGPORT, 
+  PRODUCTS_SQS,
+} = process.env;
 
 import { 
   getProductsList,
@@ -43,6 +50,15 @@ const serverlessConfiguration: AWS = {
       PGPORT,
     },
     lambdaHashingVersion: '20201221',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: {
+          'Fn:GetAtt': ['catalogItemsQueue', 'Arn'],
+        }
+      },
+    ],
   },
   // import the function via paths
   functions: { 
@@ -50,6 +66,23 @@ const serverlessConfiguration: AWS = {
     getProductById, 
     createProduct,
     catalogBatchProcess,
+  },
+  resources: {
+    Resources: {
+      catalogItemsQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: PRODUCTS_SQS,
+        },
+      },
+    },
+    Outputs: {
+      catalogItemsQueueURL: {
+        Value: {
+          'Ref': 'catalogItemsQueue',
+        }
+      }
+    }
   },
   variablesResolutionMode: '20210326',
 };
