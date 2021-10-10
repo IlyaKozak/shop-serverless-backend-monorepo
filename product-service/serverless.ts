@@ -9,6 +9,8 @@ const {
   PGPORT, 
   PRODUCTS_SQS,
   PRODUCTS_SNS,
+  SNS_SUBSCRIPTION_EMAIL,
+  // SNS_SUBSCRIPTION_EMAIL_WITH_FILTER_POLICY,
 } = process.env;
 
 import { 
@@ -90,6 +92,14 @@ const serverlessConfiguration: AWS = {
           TopicName: PRODUCTS_SNS,
         },
       },
+      snsSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: SNS_SUBSCRIPTION_EMAIL,
+          TopicArn: { 'Ref': 'createProductTopic' },
+        },    
+      }
     },
     Outputs: {
       catalogItemsQueueUrl: {
