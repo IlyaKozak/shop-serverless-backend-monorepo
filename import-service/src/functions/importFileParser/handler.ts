@@ -14,6 +14,7 @@ import {
 const Bucket = process.env.S3_BUCKET;
 
 const s3 = new AWS.S3({ region: AWS_REGION });
+const sqs = new AWS.SQS({ region: AWS_REGION });
 
 const importFileParser = async (event: S3Event) => {
   console.log('EVENT: ', event);
@@ -28,8 +29,13 @@ const importFileParser = async (event: S3Event) => {
       }).createReadStream();
   
       s3Stream.pipe(csv())
-        .on('data', (data) => {
+        .on('data', async (data) => {
           console.log(data);
+
+          await sqs.sendMessage({
+            QueueUrl: process.env.catalogItemsQueueUrl,
+            MessageBody: JSON.stringify(data),
+          }).promise();
         })
         .on('error', (error) => {
           reject(error);

@@ -1,11 +1,24 @@
 import type { AWS } from '@serverless/typescript';
 import dotenv from 'dotenv';
 dotenv.config();
-const { PGHOST, PGUSER, PGDATABASE, PGPASSWORD, PGPORT } = process.env;
+const { 
+  PGHOST,
+  PGUSER, 
+  PGDATABASE, 
+  PGPASSWORD, 
+  PGPORT, 
+  PRODUCTS_SQS,
+  PRODUCTS_SNS,
+  SNS_SUBSCRIPTION_EMAIL,
+  SNS_SUBSCRIPTION_EMAIL_WITH_FILTER_POLICY,
+} = process.env;
 
-import { getProductsList } from './src/functions/index';
-import { getProductById } from './src/functions/index';
-import { createProduct } from './src/functions/index';
+import { 
+  getProductsList,
+  getProductById,
+  createProduct,
+  catalogBatchProcess,
+} from './src/functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -38,11 +51,84 @@ const serverlessConfiguration: AWS = {
       PGDATABASE,
       PGPASSWORD,
       PGPORT,
+      SNS_ARN: { 'Ref': 'createProductTopic' },
     },
     lambdaHashingVersion: '20201221',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: {
+          'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
+        }
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: {
+          'Ref': 'createProductTopic',
+        }
+      },
+    ],
   },
   // import the function via paths
-  functions: { getProductsList, getProductById, createProduct },
+  functions: { 
+    getProductsList, 
+    getProductById, 
+    createProduct,
+    catalogBatchProcess,
+  },
+  resources: {
+    Resources: {
+      catalogItemsQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: PRODUCTS_SQS,
+        },
+      },
+      createProductTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: PRODUCTS_SNS,
+        },
+      },
+      snsSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: SNS_SUBSCRIPTION_EMAIL,
+          TopicArn: { 'Ref': 'createProductTopic' },
+        },    
+      },
+      snsSubscriptionWithFilter: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: SNS_SUBSCRIPTION_EMAIL_WITH_FILTER_POLICY,
+          TopicArn: { 'Ref': 'createProductTopic' },
+          FilterPolicy: {
+            'price': [
+              { 
+                'numeric': [ '>=', 500 ],
+              },
+            ],
+          },
+        },     
+      }
+    },
+    Outputs: {
+      catalogItemsQueueUrl: {
+        Value: {
+          'Ref': 'catalogItemsQueue',
+        }
+      },
+      catalogItemsQueueArn: {
+        Value: {
+          'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
+        }
+      }
+    }
+  },
   variablesResolutionMode: '20210326',
 };
 

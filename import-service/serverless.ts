@@ -28,6 +28,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       S3_BUCKET: '${env:S3_BUCKET}',
+      catalogItemsQueueUrl: '${cf:product-service-dev.catalogItemsQueueUrl}',
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
@@ -35,6 +36,11 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: 's3:*',
         Resource: 'arn:aws:s3:::${env:S3_BUCKET}/*',
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: '${cf:product-service-dev.catalogItemsQueueArn}',
       },
     ],
   },
