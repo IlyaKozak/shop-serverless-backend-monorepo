@@ -10,7 +10,7 @@ const {
   PRODUCTS_SQS,
   PRODUCTS_SNS,
   SNS_SUBSCRIPTION_EMAIL,
-  // SNS_SUBSCRIPTION_EMAIL_WITH_FILTER_POLICY,
+  SNS_SUBSCRIPTION_EMAIL_WITH_FILTER_POLICY,
 } = process.env;
 
 import { 
@@ -99,6 +99,21 @@ const serverlessConfiguration: AWS = {
           Endpoint: SNS_SUBSCRIPTION_EMAIL,
           TopicArn: { 'Ref': 'createProductTopic' },
         },    
+      },
+      snsSubscriptionWithFilter: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: SNS_SUBSCRIPTION_EMAIL_WITH_FILTER_POLICY,
+          TopicArn: { 'Ref': 'createProductTopic' },
+          FilterPolicy: {
+            'price': [
+              { 
+                'numeric': [ '>=', 500 ],
+              },
+            ],
+          },
+        },     
       }
     },
     Outputs: {
