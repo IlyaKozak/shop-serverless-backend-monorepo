@@ -14,6 +14,15 @@ export default {
               name: true
             }
           }
+        },
+        authorizer: {
+          name: 'basicAuthorizer',
+          arn: {
+            'Fn::ImportValue': 'basicAuthorizerQualifiedArn',
+          },
+          resultTtlInSeconds: 0,
+          identitySource: 'method.request.header.Authorization',
+          type: 'token',
         }
       }
     }
