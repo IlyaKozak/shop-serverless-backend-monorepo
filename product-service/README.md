@@ -50,6 +50,9 @@ The project code base is mainly located within the `src` folder. This folder is 
 │   │   └── DML.sql             # DML SQL
 │   │
 │   ├── functions               # Lambda configuration and source code folder
+│   │   ├── catalogBatchProcess
+│   │   │   ├── handler.ts      # `catalogBatchProcess` lambda source code
+│   │   │   └── index.ts        # `catalogBatchProcess` lambda Serverless configuration
 │   │   ├── createProduct
 │   │   │   ├── handler.ts      # `createProduct` lambda source code
 │   │   │   └── index.ts        # `createProduct` lambda Serverless configuration
