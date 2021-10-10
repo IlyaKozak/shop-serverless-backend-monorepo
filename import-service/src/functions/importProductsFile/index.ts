@@ -15,15 +15,15 @@ export default {
             }
           }
         },
-        authorizer: {
-          name: 'basicAuthorizer',
-          arn: {
-            'Fn::ImportValue': 'basicAuthorizerQualifiedArn',
-          },
-          resultTtlInSeconds: 0,
-          identitySource: 'method.request.header.Authorization',
-          type: 'token',
-        }
+        // authorizer: {
+        //   name: 'basicAuthorizer',
+        //   arn: {
+        //     'Fn::ImportValue': 'basicAuthorizerQualifiedArn',
+        //   },
+        //   resultTtlInSeconds: 0,
+        //   identitySource: 'method.request.header.Authorization',
+        //   type: 'token',
+        // }
       }
     }
   ]

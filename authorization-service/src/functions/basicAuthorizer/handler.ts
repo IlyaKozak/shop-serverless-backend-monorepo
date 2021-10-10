@@ -3,10 +3,9 @@ import { APIGatewayAuthorizerEvent } from 'aws-lambda';
 import createError from 'http-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-import { formatJSONResponse } from '../../libs/apiGateway';
 import { middyfy } from '../../libs/lambda';
 
-const generatePolicy = (principalId: string, resource: string, effect = 'Deny') => {
+const generatePolicy = (principalId: string, resource: string, effect: 'Allow' | 'Deny') => {
   return {
     principalId,
     policyDocument: {
@@ -27,34 +26,38 @@ const basicAuthrorizer = async (event: APIGatewayAuthorizerEvent) => {
     throw createError(
       StatusCodes.UNAUTHORIZED, 
       ReasonPhrases.UNAUTHORIZED, 
-      { expose: true },
     );
   }
 
-  try {
-    const authorizationToken = event.authorizationToken;
+  const authorizationToken = event.authorizationToken;
 
-    const [, encodedCredentials] = authorizationToken.split(' ');
-    const buffer = Buffer.from(encodedCredentials, 'base64');
-    const credentials = buffer.toString('utf-8').split(':');
-    const [username, password] = credentials;
-
-    console.log(`username: ${username}, password: ${password}`);
-
-    const storedPassword = process.env[username];
-    const effect = storedPassword === password ? 'Allow' : 'Deny';
-
-    const policy = generatePolicy(encodedCredentials, event.methodArn, effect);
-
-    return formatJSONResponse(policy);
-
-  } catch (error) {
+  if (!authorizationToken) {
     throw createError(
       StatusCodes.UNAUTHORIZED, 
       ReasonPhrases.UNAUTHORIZED, 
-      { expose: true },
     );
   }
+
+  const [, encodedCredentials] = authorizationToken.split(' ');
+  const buffer = Buffer.from(encodedCredentials, 'base64');
+  const credentials = buffer.toString('utf-8').split(':');
+  const [username, password] = credentials;
+
+  console.log(`username: ${username}, password: ${password}`);
+
+  const storedPassword = process.env[username];
+  const effect = storedPassword && (storedPassword === password) ? 'Allow' : 'Deny';
+
+  if (effect === 'Deny') {
+    throw createError(
+      StatusCodes.FORBIDDEN, 
+      ReasonPhrases.FORBIDDEN, 
+    );
+  }
+
+  const policy = generatePolicy(encodedCredentials, event.methodArn, effect);
+
+  return policy;
 }
 
 export const main = middyfy(basicAuthrorizer);
