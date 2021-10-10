@@ -8,6 +8,7 @@ const {
   PGPASSWORD, 
   PGPORT, 
   PRODUCTS_SQS,
+  PRODUCTS_SNS,
 } = process.env;
 
 import { 
@@ -48,6 +49,7 @@ const serverlessConfiguration: AWS = {
       PGDATABASE,
       PGPASSWORD,
       PGPORT,
+      SNS_ARN: { 'Ref': 'createProductTopic' },
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
@@ -56,6 +58,13 @@ const serverlessConfiguration: AWS = {
         Action: 'sqs:*',
         Resource: {
           'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
+        }
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: {
+          'Ref': 'createProductTopic',
         }
       },
     ],
@@ -73,6 +82,12 @@ const serverlessConfiguration: AWS = {
         Type: 'AWS::SQS::Queue',
         Properties: {
           QueueName: PRODUCTS_SQS,
+        },
+      },
+      createProductTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: PRODUCTS_SNS,
         },
       },
     },
