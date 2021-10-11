@@ -4,7 +4,7 @@ info:
   version: 3.0.0-oas3
   title: Product & Import Services Swagger Documentation
 servers:
-  - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+  - url: https://racul759t9.execute-api.eu-west-1.amazonaws.com/dev/
     description: Product Service
   - url: https://xc76c6s438.execute-api.eu-west-1.amazonaws.com/dev/
     description: Import Service
@@ -17,7 +17,7 @@ paths:
       description: Returns Array of All Products
       operationId: getProductsList
       servers:
-      - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+      - url: https://racul759t9.execute-api.eu-west-1.amazonaws.com/dev/
         description: Product Service
       responses:
         '200':
@@ -37,7 +37,7 @@ paths:
       description: Returns Created Product
       operationId: createProduct
       servers:
-      - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+      - url: https://racul759t9.execute-api.eu-west-1.amazonaws.com/dev/
         description: Product Service
       requestBody:
         content:
@@ -64,7 +64,7 @@ paths:
       description: Returns a Single Product or Not Found Error
       operationId: getProductById
       servers:
-      - url: https://zz73b76oel.execute-api.eu-west-1.amazonaws.com/rds/
+      - url: https://racul759t9.execute-api.eu-west-1.amazonaws.com/dev/
         description: Product Service
       parameters:
         - name: id
@@ -104,6 +104,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - basicAuth: []
       responses:
         '200':
           description: Successful Operation
@@ -113,8 +115,10 @@ paths:
                 type: string
                 format: uri
                 example: "https://import-service-serverless.s3.eu-west-1.amazonaws.com/uploaded/filename?AWSAccessKeyId=ASIA..."
-        '500':
-          description: Internal Server Error
+        '401':
+          description: Unathorized
+        '403':
+          description: Forbidden
 components:
   schemas:
     Product:
@@ -146,3 +150,7 @@ components:
           format: uri
           example: >-
             https://images.unsplash.com/photo-1586391159312-e26d25fa4c42?width=500
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
