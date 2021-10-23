@@ -30,62 +30,25 @@ Depending on your preferred package manager, follow the instructions below to de
 
 The project code base is mainly located within the `src` folder. This folder is divided in:
 
-- `common` - containing common data (constants)
-- `database` - containing SQL for DB (PostgreSQL)
-- `functions` - containing code base and configuration for lambda functions
-- `libs` - containing shared code base between lambdas
-- `services` - containing shared services between lambdas
-- `swagger` - contains swagger documentation for lambdas
-- `tests` - contains unit tests for lambdas
-- `types` - contains types declarations
+- `functions` - containing code base and configuration for your lambda functions
+- `libs` - containing shared code base between your lambdas
 
 ```
 .
 ├── src
-│   ├── common                  # Common data
-│   │   └── constants.ts        # Common constants
-│   │
-│   ├── database                # Database (PostgreSQL)
-│   │   ├── DDL.sql             # DDL SQL
-│   │   └── DML.sql             # DML SQL
-│   │
 │   ├── functions               # Lambda configuration and source code folder
-│   │   ├── catalogBatchProcess
-│   │   │   ├── handler.ts      # `catalogBatchProcess` lambda source code
-│   │   │   └── index.ts        # `catalogBatchProcess` lambda Serverless configuration
-│   │   ├── createProduct
-│   │   │   ├── handler.ts      # `createProduct` lambda source code
-│   │   │   └── index.ts        # `createProduct` lambda Serverless configuration
-│   │   ├── getProductById
-│   │   │   ├── handler.ts      # `getProductById` lambda source code
-│   │   │   └── index.ts        # `getProductById` lambda Serverless configuration
-│   │   ├── getProductsList
-│   │   │   ├── handler.ts      # `getProductsList` lambda source code
-│   │   │   └── index.ts        # `getProductsList` lambda Serverless configuration
+│   │   ├── basicAuthorizer
+│   │   │   ├── handler.ts      # `basicAuthorizer` lambda source code
+│   │   │   └── index.ts        # `basicAuthorizer` lambda Serverless configuration
 │   │   │
 │   │   └── index.ts            # Import/export of all lambda configurations
 │   │
-│   ├── libs                    # Lambda shared code
-│   │   └── apiGateway.ts       # API Gateway specific helpers
-│   │   └── handlerResolver.ts  # Sharable library for resolving lambda handlers
-│   │   └── lambda.ts           # Lambda middleware
-│   │
-│   ├── services                # Shared services
-│   │   └── product-service.ts  # Shared ProductService
-│   │
-│   ├── swagger                 # Swagger documentation
-│   │   └── product-service-swagger.yaml  # Swagger documentation for ProductService (yaml)
-│   │ 
-│   ├── tests                       # Tests
-│   │   └── createProduct.test.ts   # Unit tests for `createProduct` lambda
-│   │   └── getProductById.test.ts  # Unit tests for `getProductById` lambda
-│   │   └── getProductsList.test.ts # Unit tests for `getProductsList` lambda
-│   │ 
-│   └── types                   # Shared types
-│       └── product.ts          # Product type
+│   └── libs                    # Lambda shared code
+│       └── apiGateway.ts       # API Gateway specific helpers
+│       └── handlerResolver.ts  # Sharable library for resolving lambda handlers
+│       └── lambda.ts           # Lambda middleware
 │
 ├── package.json
-├── jest.config.ts              # Jest tests config file
 ├── serverless.ts               # Serverless service file
 ├── tsconfig.json               # Typescript compiler configuration
 ├── tsconfig.paths.json         # Typescript paths
