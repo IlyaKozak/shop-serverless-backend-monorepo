@@ -30,3 +30,4 @@
 - Run `npm start` to start the app
 - Run `npm run dev` to start the app in the development mode
 - Run `npm run build` to build the app
+- Run `npm run start:prod` to start the app in the production mode
