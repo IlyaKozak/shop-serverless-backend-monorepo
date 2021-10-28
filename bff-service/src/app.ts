@@ -1,8 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
 import axios, { AxiosRequestConfig, Method } from 'axios';
+import responseTime from 'response-time';
+import nodeCache from 'node-cache';
 
 const app = express();
+const cache = new nodeCache({ stdTTL: 2 * 60 });
 
+app.use(responseTime());
 app.use(express.json());
 
 app.use('/', (req: Request, res: Response, next: NextFunction) => {
@@ -15,8 +19,17 @@ app.use('/', (req: Request, res: Response, next: NextFunction) => {
 
 
 app.all('/*', async (req: Request, res: Response) => {
-  const { originalUrl, method, body } = req;
+  const { method, body } = req;
+  const originalUrl = req.originalUrl.replace(/\/*$/, '');
   console.log(`originalUrl: ${originalUrl}, method: ${method}, body: ${JSON.stringify(body)}`);
+  
+  if (method === 'GET' && /^\/product\/products$/.test(originalUrl) && cache.has(originalUrl)) {
+    const result = JSON.parse(cache.get(originalUrl));
+    console.log(`Result from cache...`);
+
+    res.json(result);
+    return;
+  }
 
   const recipient = originalUrl.split('/')[1];
   const recipientUrl = process.env[recipient];
@@ -32,6 +45,9 @@ app.all('/*', async (req: Request, res: Response) => {
 
     try {
       const response = await axios(axiosConfig);
+
+      cache.set(originalUrl, JSON.stringify(response.data));
+      
       res.json(response.data);
     } catch (error) {
       if (error.response) {
