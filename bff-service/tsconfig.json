@@ -1,25 +1,15 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
     "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitAny": true,
+    "declaration": true,
     "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
     "sourceMap": true,
-    "target": "ES2020",
-    "outDir": "./build",
-    "rootDir": "./src"
-  },
-  "include": ["./src/**/*.ts"],
-  "exclude": [
-    "node_modules/**/*",
-    ".webpack/**/*",
-    "_warmup/**/*",
-    ".vscode/**/*"
-  ]
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true
+  }
 }
