@@ -6,6 +6,7 @@ const cache = new NodeCache({ stdTTL: 2 * 60 });
 
 export async function bffMiddleware(req: Request, res: Response) {
   const { method, body } = req;
+  
   const originalUrl = req.originalUrl.replace(/\/*$/, '');
   console.log(
     `originalUrl: ${originalUrl}, method: ${method}, body: ${JSON.stringify(
