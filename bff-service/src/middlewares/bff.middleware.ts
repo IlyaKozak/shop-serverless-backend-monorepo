@@ -46,8 +46,13 @@ export async function bffMiddleware(req: Request, res: Response) {
     try {
       const response = await axios(axiosConfig);
 
-      cache.set(originalUrl, JSON.stringify(response.data));
-
+      if (
+        method === 'GET' &&
+        /^\/product\/products$/.test(originalUrl)
+      ) {
+        cache.set(originalUrl, JSON.stringify(response.data));
+      }
+      
       return res.json(response.data);
     } catch (error) {
       if (error.response) {
